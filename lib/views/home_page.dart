@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,7 +12,9 @@ class _HomePageState extends State<HomePage> {
   //Variáveis
   final _adicionarTarefaController = TextEditingController();
   late FToast fToast;
+  late bool isMorning = false;
 
+  get usuario => 'Thais';
 
   @override
   void initState() {
@@ -45,15 +48,47 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //Functions
+  void Cumprimento() {
+    DateTime now = DateTime.now();
+    int momentoAtual = DateFormat('HH:mm').format(now) as int;
+    bool isMorning = momentoAtual >= 00.00 && momentoAtual <= 17.00;
+  }
+
   //Widgets
   Widget _headerAppbar() {
-    return const Center(
+
+    String fraseDaManha = 'Espero que sua manhã seja incrível';
+    String fraseDaNoite = 'Que você tenha otimos sonhos!';
+
+    return Container(
+      padding: const EdgeInsets.all(20),
       child: Row(
-        children: [
-          Text(
-            'Teste'
-          )
-        ],
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 18),
+                    child: Text(
+                      isMorning ? 'Bom dia, $usuario' : 'Boa noite, $usuario',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      isMorning ? fraseDaManha : fraseDaNoite
+                    ),
+                  )
+                ],
+
+            ),
+          ],
       ),
     );
   }
@@ -61,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   Widget _addTaskTextField() {
     return Center(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
             child: TextField(
               controller: _adicionarTarefaController,
               decoration: InputDecoration(
