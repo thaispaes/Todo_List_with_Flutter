@@ -170,9 +170,9 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          const Expanded(
+           Expanded(
               child: Text(
-                'Você possui 0 tarefas pendentes'
+                'Você possui ${tarefas.length} tarefas pendentes'
               ),
           ),
           const SizedBox(width: 8),
@@ -224,6 +224,10 @@ class _HomePageState extends State<HomePage> {
     });
 
     cleaningTextField();
+
+  }
+
+  void deleteTaskInList () {
 
   }
 
