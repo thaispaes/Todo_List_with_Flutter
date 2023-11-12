@@ -49,10 +49,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Functions
-  void Cumprimento() {
+  void cumprimento() {
     DateTime now = DateTime.now();
     int momentoAtual = DateFormat('HH:mm').format(now) as int;
     isMorning = momentoAtual >= 00.00 && momentoAtual <= 17.00;
+  }
+
+  void cleaningTextFiel() {
+    String tarefa = _adicionarTarefaController.text;
+    if (tarefa.isEmpty){
+      _showToastError();
+    } else {
+      _adicionarTarefaController.clear();
+    }
   }
 
   //Widgets
@@ -102,16 +111,9 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 labelText: 'Adicionar tarefa',
                 hintText: 'Escreva a tarefa desejada',
-                border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
                 suffixIcon: IconButton(
-                    onPressed: () {
-                        String tarefa = _adicionarTarefaController.text;
-                        if (tarefa.isEmpty){
-                          _showToastError();
-                        } else {
-                          _adicionarTarefaController.clear();
-                        }
-                      },
+                    onPressed: () {cleaningTextFiel();},
                     icon: const Icon(Icons.close)
                 ),
               ),
