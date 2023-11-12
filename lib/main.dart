@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home:  HomePage(),
+    home:  const HomePage(),
     builder: FToastBuilder(),
     theme: ThemeData(
         brightness: Brightness.light,

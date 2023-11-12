@@ -1,18 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_list/widgets/todo_list_item.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState()  => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   //Variáveis
-  final _adicionarTarefaController = TextEditingController();
+  final TextEditingController _adicionarTarefaController = TextEditingController();
   late FToast fToast;
   late bool isMorning = false;
+  final List<String> tarefas = [];
 
   get usuario => 'Thais';
 
@@ -31,17 +34,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Todo List'),
-      ),
-      body: SingleChildScrollView(
-        child:  Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Todo List'),
+        ),
+        body: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _headerAppbar(),
-              _addTaskTextField()
+              _addTaskTextField(),
+              _listTaksView(),
+              _cleaningTextField()
             ],
         ),
       ),
@@ -55,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     isMorning = momentoAtual >= 00.00 && momentoAtual <= 17.00;
   }
 
-  void cleaningTextFiel() {
+  void cleaningTextField() {
     String tarefa = _adicionarTarefaController.text;
     if (tarefa.isEmpty){
       _showToastError();
@@ -103,22 +107,83 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _addTaskTextField() {
-    return Center(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
-            child: TextField(
-              controller: _adicionarTarefaController,
-              decoration: InputDecoration(
-                labelText: 'Adicionar tarefa',
-                hintText: 'Escreva a tarefa desejada',
-                border: UnderlineInputBorder(),
-                suffixIcon: IconButton(
-                    onPressed: () {cleaningTextFiel();},
-                    icon: const Icon(Icons.close)
-                ),
+    return Column(
+      children: [
+        Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
+                      child: TextField(
+                        controller: _adicionarTarefaController,
+                        decoration: const InputDecoration(
+                          labelText: 'Adicionar tarefa',
+                          hintText: 'Escreva a tarefa desejada',
+                          border: OutlineInputBorder(),
+                          /*suffixIcon: IconButton(
+                              onPressed: () {cleaningTextFiel();},
+                              icon: const Icon(Icons.close)
+                          ),*/
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20, top: 14),
+                    child: ElevatedButton(
+                        onPressed: addTaskInList,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(25)
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          )
+      ],
+    );
+  }
+
+  Widget _listTaksView() {
+    return Flexible(
+      child: ListView(
+          shrinkWrap: true,
+        children: [
+          for(String tarefa in tarefas)
+            ListTile(
+              title: todoListItem(tarefa: tarefa)
+            )
+        ],
+        ),
+    );
+  }
+
+  Widget _cleaningTextField() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          const Expanded(
+              child: Text(
+                'Você possui 0 tarefas pendentes'
+              ),
+          ),
+          const SizedBox(width: 8),
+          ElevatedButton(
+              onPressed: cleaningTextField,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(14)
+              ),
+              child: const Text('Limpar Tudo'))
+        ],
+      ),
     );
   }
 
@@ -149,6 +214,17 @@ class _HomePageState extends State<HomePage> {
       gravity: ToastGravity.BOTTOM,
       toastDuration: const Duration(seconds: 2),
     );
+  }
+
+  void addTaskInList () {
+    String text = _adicionarTarefaController.text;
+
+    setState(() {
+      tarefas.add(text);
+    });
+
+    cleaningTextField();
+
   }
 
 }
