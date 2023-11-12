@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   void Cumprimento() {
     DateTime now = DateTime.now();
     int momentoAtual = DateFormat('HH:mm').format(now) as int;
-    bool isMorning = momentoAtual >= 00.00 && momentoAtual <= 17.00;
+    isMorning = momentoAtual >= 00.00 && momentoAtual <= 17.00;
   }
 
   //Widgets
