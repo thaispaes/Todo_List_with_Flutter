@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/widgets/todo_list_item.dart';
+
+import '../models/Todo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _adicionarTarefaController = TextEditingController();
   late FToast fToast;
   late bool isMorning = false;
-  final List<String> tarefas = [];
+  final List<Todo> tarefas = [];
 
   get usuario => 'Thais';
 
@@ -31,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
     _adicionarTarefaController.clear();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +159,13 @@ class _HomePageState extends State<HomePage> {
     return Flexible(
       child: ListView(
           shrinkWrap: true,
-        children: [
-          for(String tarefa in tarefas)
-            ListTile(
-              title: todoListItem(tarefa: tarefa)
-            )
-        ],
+          children: [
+            for(Todo tarefa in tarefas)
+              TodoListItem(
+                  tarefa: tarefa,
+                  onDelete: deleteTaskInList(tarefa)
+              )
+          ],
         ),
     );
   }
@@ -219,15 +224,20 @@ class _HomePageState extends State<HomePage> {
     String text = _adicionarTarefaController.text;
 
     setState(() {
-      tarefas.add(text);
+      Todo newTodo = Todo(
+        title: text,
+        dateTime: DateTime.now(),
+      );
+      tarefas.add(newTodo);
     });
 
     cleaningTextField();
 
   }
 
-  void deleteTaskInList () {
-
+  void deleteTaskInList (Todo tarefa) {
+      setState(() {
+        tarefas.remove(tarefa);
+      });
   }
-
 }
