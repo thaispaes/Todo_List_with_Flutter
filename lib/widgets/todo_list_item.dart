@@ -8,6 +8,7 @@ import 'package:todo_list/views/home_page.dart';
 
 Widget build (BuildContext context) {
     return todoListItem();
+
 }
 
 Widget todoListItem({String? tarefa}) {

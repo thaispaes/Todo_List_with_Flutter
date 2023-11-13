@@ -208,7 +208,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.BOTTOM,
